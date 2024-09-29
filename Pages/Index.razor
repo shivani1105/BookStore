@@ -1,4 +1,33 @@
 ﻿@page "/"
+@using BookStore.Models
+@using BookStore.Data
 
 <PageTitle>Lovely Books</PageTitle>
 
+
+<div class="main">
+    <h1>Books Everywhere</h1>
+    <ul class="pizza-cards">
+        @if (publishers != null)
+        {
+            @foreach (var book in publishers)
+            {
+                <li style="background-image: url('@book.ImageUrl')">
+                    <div class="pizza-info">
+                        <span class="title">@book.Name</span>
+                        @book.Title
+                        @book.PubDate
+                        <span class="price">@book.GetFormattedBasePrice()</span>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+
+
+</div>
+
+@code{
+    //@onclick="@(() => OrderState.ShowConfigurePizzaDialog(special))"
+    public List<Publisher> publishers = new();
+}

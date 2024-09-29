@@ -6,6 +6,6 @@
 
         public int AuthorID { get; set; }
 
-        public int BookISBN { get; set; }
+        public string BookISBN { get; set; }
     }
 }

@@ -6,8 +6,6 @@
 
         public Customer Customer { get; set; }
 
-        public string CustomerId { get; set; }
-
         public DateTime CreatedTime { get; set; }
 
         public Address DeliveryAddress { get; set; } = new Address();

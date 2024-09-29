@@ -1,4 +1,6 @@
-﻿namespace BookStore.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BookStore.Models
 {
     public class Book
     {
@@ -13,7 +15,7 @@
 
 
 
-
+        [Key]
         public string ISBN { get; set; }
 
         public Publisher Publisher { get; set; } // Reference to the publisher
