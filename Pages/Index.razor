@@ -1,22 +1,33 @@
 ﻿@page "/"
 @using BookStore.Models
 @using BookStore.Data
+@using BookStore.Services
 
-<PageTitle>Lovely Books</PageTitle>
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+@layout MainLayout
+
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@inject OrderState OrderState
+@inject IJSRuntime JavaScript
+
 
 
 <div class="main">
-    <h1>Books Everywhere</h1>
-    <ul class="pizza-cards">
-        @if (publishers != null)
+    <h1>Magical Books</h1>
+    <ul class="book-cards">
+        @if (publisher_books != null)
         {
-            @foreach (var book in publishers)
+            @foreach (var book in publisher_books)
             {
-                <li style="background-image: url('@book.ImageUrl')">
-                    <div class="pizza-info">
+                <li @onclick="@(() => OrderState.ShowConfigureBookDialog(book))" style="background-image: url('@book.ImageUrl')">
+                    <div class="book-info">
                         <span class="title">@book.Name</span>
                         @book.Title
-                        @book.PubDate
+                        @book.Category
                         <span class="price">@book.GetFormattedBasePrice()</span>
                     </div>
                 </li>
@@ -27,7 +38,80 @@
 
 </div>
 
-@code{
-    //@onclick="@(() => OrderState.ShowConfigurePizzaDialog(special))"
-    public List<Publisher> publishers = new();
+<div class="sidebar">
+    @if (order.Books.Any())
+    {
+        <div class="order-contents">
+            <h2>Your Order</h2>
+            @foreach (var configuredBook in order.Books)
+            {
+                <div class="cart-item">
+                    <div class="title">@(configuredBook.Quantity)" @configuredBook.Publisher.Name</div>
+                    <div class="item-price">
+                        @configuredBook.GetFormattedTotalPrice()
+                    </div>
+                    <button type="button" class="close text-danger" aria-label="Close"
+                            @onclick="@(async () => await RemoveBookConfirmation(configuredBook))">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-cart">Choose a pizza<br />to get started</div>
+    }
+    <div class="order-total @(order.Books.Any() ? "" : "hidden")">
+        Total:
+        <span class="total-price">@order.GetFormattedTotalPrice()</span>
+        <a href="checkout" class="@(OrderState.Order.Books.Count == 0 ? "btn btn-warning disabled" : "btn btn-warning")">
+            Order >
+        </a>
+    </div>
+</div>
+
+
+
+
+
+@if (OrderState.ShowingConfigureDialog)
+{
+    <BookConfigurationDialog
+      Book="OrderState.ConfiguringBook"
+      OnCancel="OrderState.CancelConfigureBookDialog"
+      OnConfirm="OrderState.ConfirmConfigureBookDialog" />
+}
+
+@code {
+    private List<Publisher> publisher_books = new();
+
+    Order order => OrderState.Order;
+
+    protected override async Task OnInitializedAsync()
+    {
+        publisher_books = await HttpClient.GetFromJsonAsync<List<Publisher>>(NavigationManager.BaseUri + "books");
+    }
+
+    async Task RemoveBookConfirmation(Book removeBook)
+    {
+        var messageParams = new
+        {
+            title = "Remove Book?",
+            text = $"""Do you want to remove the "{removeBook.Publisher!.Name}" from your order?""",
+            icon = "warning",
+            buttons = new
+            {
+                abort = new { text = "No, leave it in my order", value = false },
+                confirm = new { text = "Yes, remove book", value = true }
+            },
+            dangerMode = true
+        };
+
+        if (await JavaScript.InvokeAsync<bool>("swal", messageParams))
+        {
+            OrderState.RemoveConfiguredBook(removeBook);
+        }
+    }
+    
 }

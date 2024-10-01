@@ -15,7 +15,7 @@ namespace BookStore.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.33");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
             modelBuilder.Entity("BookStore.Models.Address", b =>
                 {
@@ -85,11 +85,14 @@ namespace BookStore.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("PromotionDescription")
+                    b.Property<string>("PromotionCode")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PublisherId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ISBN");

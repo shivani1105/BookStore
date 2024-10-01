@@ -1,0 +1,95 @@
+﻿@inject HttpClient HttpClient
+@using BookStore.Models
+
+<div class="dialog-container">
+    <div class="dialog">
+        <div class="dialog-title">
+            <h2>@Book.Publisher.Title</h2>
+            @Book.Publisher.Name
+        </div>
+
+        <form class="dialog-body">
+            <!-- Quantity Stepper -->
+            <div class="form-field">
+                <label>Quantity:</label>
+                <div class="quantity-stepper">
+                    <button type="button" @onclick="DecrementQuantity" class="btn btn-light" disabled="@(Book.Quantity <= Book.MinimumQuantity)">-</button>
+                    <span class="quantity-label">@Book.Quantity</span>
+                    <button type="button" @onclick="IncrementQuantity" class="btn btn-light" disabled="@(Book.Quantity >= Book.MaximumQuantity)">+</button>
+                </div>
+            </div>
+
+            <!-- Promotion Checkbox and Description -->
+            <div>
+                <label>
+                    <input type="checkbox" @bind="Book.IsOnPromotion"/>
+                    Apply Promotion
+                </label>
+
+                @if (Book.IsOnPromotion)
+                {
+                    <!-- Promotion Code Input -->
+                    <div class="form-field">
+                        <label>Promotion Code:</label>
+                        <input type="text" @bind="Book.PromotionCode" @oninput="RecalculatePrice" placeholder="Enter Promotion Code" />
+                    </div>
+                }
+            </div>
+        </form>
+
+        <div class="dialog-buttons">
+            <button class="btn btn-secondary mr-auto" @onclick="OnCancel">Cancel</button>
+            <span class="mr-center">
+                Price: <span class="price">@(Book.GetFormattedTotalPrice())</span>
+            </span>
+            <button class="btn btn-success ml-auto" @onclick="OnConfirm">Order ></button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Book Book { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
+    public EventCallback OnConfirm { get; set; }
+
+    // Increment Quantity
+    private void IncrementQuantity()
+    {
+        if (Book.Quantity < Book.MaximumQuantity)
+        {
+            Book.Quantity++;
+        }
+        RecalculatePrice();
+    }
+
+    // Decrement Quantity
+    private void DecrementQuantity()
+    {
+        if (Book.Quantity > Book.MinimumQuantity)
+        {
+            Book.Quantity--;
+        }
+        RecalculatePrice();
+    }
+
+    // Recalculate the price when quantity, promotion, or promotion code changes
+    private void RecalculatePrice()
+    {
+        // Trigger the price recalculation (this ensures the UI updates with the correct price)
+        StateHasChanged(); // Force Blazor to re-render the UI and show updated price
+    }
+
+    protected override void OnInitialized()
+    {
+        // Initialize the book quantity to minimum if not already set
+        if (Book.Quantity < Book.MinimumQuantity)
+        {
+            Book.Quantity = Book.MinimumQuantity;
+        }
+    }
+}

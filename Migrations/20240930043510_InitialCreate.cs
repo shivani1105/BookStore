@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookStore.Migrations
 {
+    /// <inheritdoc />
     public partial class InitialCreate : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -114,8 +116,9 @@ namespace BookStore.Migrations
                     ISBN = table.Column<string>(type: "TEXT", nullable: false),
                     IsOnPromotion = table.Column<bool>(type: "INTEGER", nullable: false),
                     DiscountPercentage = table.Column<decimal>(type: "TEXT", nullable: true),
-                    PromotionDescription = table.Column<string>(type: "TEXT", nullable: false),
+                    PromotionCode = table.Column<string>(type: "TEXT", nullable: false),
                     PublisherId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -185,6 +188,7 @@ namespace BookStore.Migrations
                 column: "DeliveryAddressId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

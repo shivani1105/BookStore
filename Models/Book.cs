@@ -7,11 +7,12 @@ namespace BookStore.Models
         // Promotion details specific to the book
         public bool IsOnPromotion { get; set; } // Flag to indicate if the book is on promotion
         public decimal? DiscountPercentage { get; set; } // Discount percentage specific to the book
-        public string PromotionDescription { get; set; } // Description of the promotion (optional)
+        public string PromotionCode { get; set; } // Code for additional discount (optional)
 
-       
+
+
         public const int MinimumQuantity = 1;
-        public const int MaximumQuantity = 20;
+        public const int MaximumQuantity = 5;
 
 
 
@@ -24,7 +25,17 @@ namespace BookStore.Models
 
         public int PublisherId { get; set; } // Foreign key of publisher
 
+        public int Quantity { get; set; }
+
         public int OrderId { get; set; } // Order ID reference
+
+        // Predefined promotion codes and their discount percentages
+        private static Dictionary<string, decimal> PromotionCodes = new Dictionary<string, decimal>
+        {
+            { "NEWYEAR", 10m },  // 10% discount for NEWYEAR promotion
+            { "SUMMER20", 15m }, // 15% discount for SUMMER20
+            { "FALLSALE", 20m }, // 20% discount for FALLSALE
+        };
 
         // Method to calculate the final base price using Publisher's base price
         public decimal GetBasePrice()
@@ -32,13 +43,23 @@ namespace BookStore.Models
             // Start with the base price set by the publisher
             decimal finalPrice = Publisher.GetBasePrice();
 
-            // Apply book-specific promotions if available
-            if (IsOnPromotion && DiscountPercentage.HasValue && DiscountPercentage.Value > 0)
+            // Apply the book-specific promotions if available
+            if (IsOnPromotion)
             {
-                finalPrice -= (finalPrice * DiscountPercentage.Value / 100);
+                // Set the DiscountPercentage based on the PromotionCode
+                if (!string.IsNullOrEmpty(PromotionCode) && PromotionCodes.ContainsKey(PromotionCode.ToUpper()))
+                {
+                    DiscountPercentage = PromotionCodes[PromotionCode.ToUpper()];
+                }
+
+                // Apply the discount if DiscountPercentage has a value
+                if (DiscountPercentage.HasValue && DiscountPercentage.Value > 0)
+                {
+                    finalPrice -= (finalPrice * DiscountPercentage.Value / 100);
+                }
             }
 
-            return finalPrice;
+            return finalPrice * Quantity;
         }
 
         // Method to return the final price (after all discounts)

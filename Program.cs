@@ -1,13 +1,17 @@
 using BookStore.Data;
+using BookStore.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpClient();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddScoped<OrderState>();
 builder.Services.AddDbContext<BookStoreContext>(options =>
     options.UseSqlite("Data Source=Books.db"));
 
