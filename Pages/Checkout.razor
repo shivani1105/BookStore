@@ -1,0 +1,123 @@
+﻿@implements IDisposable
+
+@using BookStore.Models
+@using BookStore.Services
+@layout MainLayout
+
+@page "/checkout"
+@inject OrderState OrderState
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+
+<div class="main">
+    <EditForm EditContext=editContext OnValidSubmit=PlaceOrder>
+    <div class="checkout-cols">
+        <div class="checkout-order-details">
+            <h4>Review order</h4>
+            <OrderReview Order="Order" />
+        </div>
+
+        <div class="checkout-delivery-address">
+            <h4>Deliver to...</h4>
+                @if (isError)
+                {
+                    <div class="alert alert-danger">Please enter a name and address.</div>
+                }
+            <AddressEditor Address="Order.DeliveryAddress" />
+        </div>
+    </div>
+
+        <button class="checkout-button btn btn-warning" type="Submit" disabled=@isError>
+        Place order
+        </button>
+        <DataAnnotationsValidator />
+    </EditForm>
+</div>
+
+@code {
+    Order Order => OrderState.Order;
+
+    bool isSubmitting;
+
+    bool isError = false;
+
+    private EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+
+        /*var book = OrderState.Order.Books.FirstOrDefault(); // Assuming only one book
+        if (book == null || string.IsNullOrWhiteSpace(book.ISBN))
+        {
+            // Handle error if book or ISBN is missing
+            throw new Exception("Book or ISBN is missing.");
+        }*/
+
+        // Ensure default values for Order and DeliveryAddress
+        Order.CustomerId = "default-user"; // Set default UserId
+        
+        /* Order.DeliveryAddress = new Address
+             {
+                 Name = "John Doe",
+                 Line1 = "123 Default Street",
+                 Line2 = "Mylane",
+                 City = "Default City",
+                 Region = "Default Region",
+                 PostalCode = "12345"
+             }; */
+
+        editContext = new(Order.DeliveryAddress);
+        editContext.OnFieldChanged += HandleFieldChanged;
+
+    }
+
+
+    private void HandleFieldChanged(object sender, FieldChangedEventArgs e)
+    {
+        isError = !editContext.Validate();
+        StateHasChanged();
+    }
+
+    
+    async Task PlaceOrder()
+    {
+        
+        try
+        {
+            var response = await HttpClient.PostAsJsonAsync($"{NavigationManager.BaseUri}orders", OrderState.Order);
+
+            // Check for a successful response
+            if (response.IsSuccessStatusCode)
+            {
+                var newOrderId = await response.Content.ReadFromJsonAsync<int>();
+                OrderState.ResetOrder();
+                NavigationManager.NavigateTo($"myorders/{newOrderId}");
+            }
+            else
+            {
+                // Log the error message or status code if not successful
+                Console.WriteLine($"Error: {response.StatusCode}, {await response.Content.ReadAsStringAsync()}");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Catch any exceptions that occur and log them
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    public void Dispose()
+    {
+        editContext.OnFieldChanged -= HandleFieldChanged;
+    }
+
+}
+
+
+
+

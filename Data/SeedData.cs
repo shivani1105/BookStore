@@ -17,8 +17,8 @@ namespace BookStore.Data
                     {
                         Id = 1,
                         Name = "Rupa Publications",
-                        Cost = 100m, // Cost to produce
-                        Retail = 250m, // Retail price
+                        Cost = 10m, // Cost to produce
+                        Retail = 25m, // Retail price
                         Discount = 10m, // 10% discount
                         Title = "Half Girlfriend",
                         PubDate = new DateTime(2014, 10, 1), // Published date
@@ -29,8 +29,8 @@ namespace BookStore.Data
                     {
                         Id = 2,
                         Name = "Bloomsbury Publishing",
-                        Cost = 150m,
-                        Retail = 450m,
+                        Cost = 15m,
+                        Retail = 45m,
                         Discount = 5m,
                         Title = "Harry Potter and the Chamber of Secrets",
                         PubDate = new DateTime(1998, 7, 2),
@@ -41,8 +41,8 @@ namespace BookStore.Data
                     {
                         Id = 3,
                         Name = "Little, Brown Books for Young Readers",
-                        Cost = 120m,
-                        Retail = 400m,
+                        Cost = 12m,
+                        Retail = 40m,
                         Discount = 15m,
                         Title = "The Land of Stories: A Grimm Warning",
                         PubDate = new DateTime(2014, 7, 8),
@@ -53,8 +53,8 @@ namespace BookStore.Data
                     {
                         Id = 4,
                         Name = "Random House Children's Books",
-                        Cost = 80m,
-                        Retail = 200m,
+                        Cost = 8m,
+                        Retail = 20m,
                         Discount = 0m, // No discount
                         Title = "Not Exactly A Love Story",
                         PubDate = new DateTime(2012, 12, 11),
@@ -65,8 +65,8 @@ namespace BookStore.Data
                     {
                         Id = 5,
                         Name = "Manoj Publications",
-                        Cost = 50m,
-                        Retail = 150m,
+                        Cost = 5m,
+                        Retail = 15m,
                         Discount = 5m,
                         Title = "Moral Stories from Panchatantra",
                         PubDate = new DateTime(2009, 8, 15),
@@ -77,8 +77,8 @@ namespace BookStore.Data
                     {
                         Id = 6,
                         Name = "Westland Publications",
-                        Cost = 180m,
-                        Retail = 350m,
+                        Cost = 18m,
+                        Retail = 35m,
                         Discount = 20m,
                         Title = "Sita: Warrior of Mithila",
                         PubDate = new DateTime(2017, 5, 29),
@@ -89,8 +89,8 @@ namespace BookStore.Data
                     {
                         Id = 7,
                         Name = "HarperCollins",
-                        Cost = 100m,
-                        Retail = 300m,
+                        Cost = 10m,
+                        Retail = 30m,
                         Discount = 10m,
                         Title = "We Could Be So Good",
                         PubDate = new DateTime(2023, 6, 1),
@@ -101,8 +101,8 @@ namespace BookStore.Data
                     {
                         Id = 8,
                         Name = "Rupa Publications",
-                        Cost = 100m,
-                        Retail = 250m,
+                        Cost = 10m,
+                        Retail = 25m,
                         Discount = 5m,
                         Title = "2 States: The Story of My Marriage",
                         PubDate = new DateTime(2009, 10, 10),

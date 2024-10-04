@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.Migrations
 {
     [DbContext(typeof(BookStoreContext))]
-    [Migration("20240930043510_InitialCreate")]
+    [Migration("20241002153028_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -122,44 +122,6 @@ namespace BookStore.Migrations
                     b.ToTable("BookAuthor");
                 });
 
-            modelBuilder.Entity("BookStore.Models.Customer", b =>
-                {
-                    b.Property<int>("CustomerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsAuthenticated")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("CustomerId");
-
-                    b.ToTable("Customer");
-                });
-
             modelBuilder.Entity("BookStore.Models.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -169,15 +131,14 @@ namespace BookStore.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("DeliveryAddressId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("OrderId");
-
-                    b.HasIndex("CustomerId");
 
                     b.HasIndex("DeliveryAddressId");
 
@@ -262,19 +223,11 @@ namespace BookStore.Migrations
 
             modelBuilder.Entity("BookStore.Models.Order", b =>
                 {
-                    b.HasOne("BookStore.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BookStore.Models.Address", "DeliveryAddress")
                         .WithMany()
                         .HasForeignKey("DeliveryAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Customer");
 
                     b.Navigation("DeliveryAddress");
                 });

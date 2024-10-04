@@ -46,7 +46,7 @@
             @foreach (var configuredBook in order.Books)
             {
                 <div class="cart-item">
-                    <div class="title">@(configuredBook.Quantity)" @configuredBook.Publisher.Name</div>
+                    <div class="title">@configuredBook.Publisher.Title - @(configuredBook.Quantity)</div>
                     <div class="item-price">
                         @configuredBook.GetFormattedTotalPrice()
                     </div>
@@ -60,7 +60,7 @@
     }
     else
     {
-        <div class="empty-cart">Choose a pizza<br />to get started</div>
+        <div class="empty-cart">Come experience the Magic<br />Choose a book</div>
     }
     <div class="order-total @(order.Books.Any() ? "" : "hidden")">
         Total:

@@ -34,7 +34,7 @@ namespace BookStore.Models
         {
             { "NEWYEAR", 10m },  // 10% discount for NEWYEAR promotion
             { "SUMMER20", 15m }, // 15% discount for SUMMER20
-            { "FALLSALE", 20m }, // 20% discount for FALLSALE
+            { "FALLSALE", 12m }, // 20% discount for FALLSALE
         };
 
         // Method to calculate the final base price using Publisher's base price

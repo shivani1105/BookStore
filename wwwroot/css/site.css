@@ -305,7 +305,7 @@ form {
 }
 
     .item-price::before {
-        content: '£';
+        content: '$';
         font-weight: 100;
         margin-right: 0.3rem;
     }
@@ -452,7 +452,7 @@ form {
 }
 
     .dialog .topping-price::before {
-        content: '£';
+        content: '$';
     }
 
 .delete-topping {

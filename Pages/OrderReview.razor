@@ -1,0 +1,23 @@
+﻿@using BookStore.Models
+
+@foreach (var book in Order.Books)
+{
+    <p>
+        <strong>
+            @book.Publisher.Name - @(book.Quantity)
+            ($@book.GetFormattedTotalPrice())
+        </strong>
+    </p>
+}
+
+<p>
+    <strong>
+        Total price:
+        $@Order.GetFormattedTotalPrice()
+    </strong>
+</p>
+
+@code {
+    [Parameter] public Order Order { get; set; }
+}
+
