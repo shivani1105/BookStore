@@ -16,7 +16,7 @@ public class OrderState
             PublisherId = publisher.Id,
             ISBN = publisher.Id + "BOOK",
             Quantity = Book.MinimumQuantity,
-            Authors = new List<BookAuthor>(),
+            Authors = new List<BookAuthor>()
         };
 
         ShowingConfigureDialog = true;

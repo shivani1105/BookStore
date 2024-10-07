@@ -1,0 +1,45 @@
+﻿@layout MainLayout
+
+@page "/myauthors"
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+@using BookStore.Models
+@using BookStore.Components
+
+
+<div class="main">
+    @if (authors == null)
+    {
+        <text>Loading...</text>
+    }
+    else if (!authors.Any())
+    {
+        <h2>No authors found</h2>
+    }
+    else
+    {
+        <div class="list-group authors-list">
+            @foreach (var author in authors)
+            {
+                <div class="list-group-item">
+                    <div class="col">
+                        <h5>@author.Name</h5>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    List<Author> authors = new List<Author>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // Call the API endpoint to get the list of authors
+        authors = await HttpClient.GetFromJsonAsync<List<Author>>(
+            $"{NavigationManager.BaseUri}authors");
+    }
+}
